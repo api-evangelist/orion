@@ -3,7 +3,8 @@ description: Orion Health is a global healthcare technology company that provide
 image: https://www.orionhealth.com/assets/img/orion-health-logo.png
 url: https://www.orionhealth.com
 created: '2024'
-modified: '2024'
+modified: '2026-03-04'
+specificationVersion: '0.18'
 apis:
 - name: Orion Health FHIR API
   description: Fast Healthcare Interoperability Resources (FHIR) API for accessing and exchanging healthcare data
@@ -20,9 +21,15 @@ apis:
   - type: Documentation
     url: https://www.orionhealth.com/developers/fhir-api
   - type: OpenAPI
-    url: https://api.orionhealth.com/fhir/swagger.json
+    url: openapi/orion-fhir-openapi.yml
   - type: Authentication
     url: https://www.orionhealth.com/developers/authentication
+  - type: JSONSchema
+    url: json-schema/orion-patient-schema.json
+  - type: JSONSchema
+    url: json-schema/orion-observation-schema.json
+  - type: JSONLD
+    url: json-ld/orion-healthcare-context.jsonld
   contact:
   - FN: Orion Health API Support
     email: apisupport@orionhealth.com
@@ -42,9 +49,13 @@ apis:
   - type: Documentation
     url: https://www.orionhealth.com/developers/population-health-api
   - type: OpenAPI
-    url: https://api.orionhealth.com/population-health/swagger.json
+    url: openapi/orion-population-health-openapi.yml
   - type: Sandbox
     url: https://sandbox.orionhealth.com/population-health
+  - type: JSONSchema
+    url: json-schema/orion-care-plan-schema.json
+  - type: JSONLD
+    url: json-ld/orion-healthcare-context.jsonld
   contact:
   - FN: Orion Health API Support
     email: apisupport@orionhealth.com
@@ -64,9 +75,11 @@ apis:
   - type: Documentation
     url: https://www.orionhealth.com/developers/hie-api
   - type: OpenAPI
-    url: https://api.orionhealth.com/hie/swagger.json
+    url: openapi/orion-hie-openapi.yml
   - type: Terms of Service
     url: https://www.orionhealth.com/terms-of-service
+  - type: JSONLD
+    url: json-ld/orion-healthcare-context.jsonld
   contact:
   - FN: Orion Health API Support
     email: apisupport@orionhealth.com
@@ -87,17 +100,21 @@ apis:
   - type: Documentation
     url: https://www.orionhealth.com/developers/rhapsody-api
   - type: OpenAPI
-    url: https://api.orionhealth.com/rhapsody/swagger.json
+    url: openapi/orion-rhapsody-openapi.yml
+  - type: AsyncAPI
+    url: asyncapi/orion-rhapsody-messaging-asyncapi.yml
   - type: Getting Started
     url: https://www.orionhealth.com/developers/getting-started
+  - type: JSONLD
+    url: json-ld/orion-healthcare-context.jsonld
   contact:
   - FN: Orion Health API Support
     email: apisupport@orionhealth.com
     url: https://www.orionhealth.com/support
 maintainers:
-- FN: Orion Health Developer Relations
-  email: developers@orionhealth.com
-  url: https://www.orionhealth.com/developers
+- FN: Kin Lane
+  email: kin@apievangelist.com
+  url: https://apievangelist.com
 tags:
 - Healthcare
 - Health IT
@@ -111,7 +128,7 @@ tags:
 include: []
 common:
 - type: Portal
-  url: https://developer.orionhealth.com
+  url: https://developer.orionhealth.io/
 - type: Getting Started
   url: https://www.orionhealth.com/developers/getting-started
 - type: Authentication
@@ -128,3 +145,9 @@ common:
   url: https://www.orionhealth.com/blog
 - type: Status
   url: https://status.orionhealth.com
+- type: Website
+  url: https://www.orionhealth.com
+- type: GitHub Organization
+  url: https://github.com/orionhealth
+- type: Community
+  url: https://community.orionhealth.com
