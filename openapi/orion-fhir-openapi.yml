@@ -26,30 +26,30 @@ security:
   - oauth2: []
   - bearerAuth: []
 tags:
-  - name: Patient
-    description: Operations on Patient resources
-  - name: Encounter
-    description: Operations on Encounter resources
-  - name: Observation
-    description: Operations on Observation resources (vitals, labs, etc.)
-  - name: Condition
-    description: Operations on Condition resources (diagnoses, problems)
-  - name: MedicationRequest
-    description: Operations on MedicationRequest resources
   - name: AllergyIntolerance
     description: Operations on AllergyIntolerance resources
-  - name: Procedure
-    description: Operations on Procedure resources
-  - name: DiagnosticReport
-    description: Operations on DiagnosticReport resources
   - name: CarePlan
     description: Operations on CarePlan resources
-  - name: Immunization
-    description: Operations on Immunization resources
+  - name: Condition
+    description: Operations on Condition resources (diagnoses, problems)
+  - name: DiagnosticReport
+    description: Operations on DiagnosticReport resources
   - name: DocumentReference
     description: Operations on DocumentReference resources
+  - name: Encounter
+    description: Operations on Encounter resources
+  - name: Immunization
+    description: Operations on Immunization resources
+  - name: MedicationRequest
+    description: Operations on MedicationRequest resources
   - name: Metadata
     description: Server capability and metadata operations
+  - name: Observation
+    description: Operations on Observation resources (vitals, labs, etc.)
+  - name: Patient
+    description: Operations on Patient resources
+  - name: Procedure
+    description: Operations on Procedure resources
 paths:
   /metadata:
     get:

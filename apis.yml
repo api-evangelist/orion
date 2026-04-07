@@ -1,7 +1,5 @@
 name: Orion Health
-description: Orion Health is a global healthcare technology company that 
-  provides health information technology solutions, including population health 
-  management, health information exchange, and clinical workflow tools.
+description: Orion Health is a global healthcare technology company that provides health information technology solutions, including population health management, health information exchange, and clinical workflow tools.
 image: https://www.orionhealth.com/assets/img/orion-health-logo.png
 url: https://www.orionhealth.com
 created: '2024'
@@ -16,10 +14,10 @@ apis:
     humanURL: https://www.orionhealth.com/products/rhapsody-integration-engine/
     baseURL: https://api.orionhealth.com/fhir
     tags:
-      - Healthcare
-      - FHIR
-      - Interoperability
       - EHR
+      - FHIR
+      - Healthcare
+      - Interoperability
       - Patient Data
     properties:
       - type: Documentation
@@ -45,10 +43,10 @@ apis:
     humanURL: https://www.orionhealth.com/products/population-health/
     baseURL: https://api.orionhealth.com/population-health
     tags:
-      - Population Health
       - Analytics
       - Care Coordination
       - Healthcare
+      - Population Health
       - Risk Stratification
     properties:
       - type: Documentation
@@ -73,11 +71,11 @@ apis:
     humanURL: https://www.orionhealth.com/products/health-information-exchange/
     baseURL: https://api.orionhealth.com/hie
     tags:
-      - HIE
+      - Data Sharing
       - Health Information Exchange
+      - HIE
       - Interoperability
       - Patient Records
-      - Data Sharing
     properties:
       - type: Documentation
         url: https://www.orionhealth.com/developers/hie-api
@@ -99,10 +97,10 @@ apis:
     humanURL: https://www.orionhealth.com/products/rhapsody-integration-engine/
     baseURL: https://api.orionhealth.com/rhapsody
     tags:
-      - Integration
+      - FHIR
       - Healthcare
       - HL7
-      - FHIR
+      - Integration
       - Interoperability
       - Messaging
     properties:
@@ -125,15 +123,15 @@ maintainers:
     email: kin@apievangelist.com
     url: https://apievangelist.com
 tags:
-  - Healthcare
-  - Health IT
+  - EHR
   - FHIR
+  - Health IT
+  - Healthcare
+  - HIE
   - HL7
+  - Integration
   - Interoperability
   - Population Health
-  - HIE
-  - EHR
-  - Integration
 include: []
 common:
   - type: Portal

@@ -27,20 +27,20 @@ security:
   - bearerAuth: []
   - apiKeyAuth: []
 tags:
-  - name: Routes
-    description: Integration route management
   - name: Communication Points
     description: Communication point configuration and management
+  - name: Configuration
+    description: Engine configuration management
+  - name: Lookup Tables
+    description: Lookup table management for data mapping
   - name: Message Queues
     description: Message queue monitoring and management
   - name: Messages
     description: Message search, inspection, and reprocessing
   - name: Monitoring
     description: System health and performance monitoring
-  - name: Configuration
-    description: Engine configuration management
-  - name: Lookup Tables
-    description: Lookup table management for data mapping
+  - name: Routes
+    description: Integration route management
 paths:
   /routes:
     get:
@@ -200,8 +200,8 @@ paths:
         Retrieve message processing statistics for a specific route
         including throughput, error rates, and processing times.
       tags:
-        - Routes
         - Monitoring
+        - Routes
       parameters:
         - name: routeId
           in: path

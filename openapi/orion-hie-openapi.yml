@@ -26,18 +26,18 @@ security:
   - oauth2: []
   - bearerAuth: []
 tags:
-  - name: Patient Identity
-    description: Patient identity matching and cross-referencing (MPI)
-  - name: Documents
-    description: Clinical document exchange and retrieval
-  - name: Consent
-    description: Patient consent management for data sharing
-  - name: Provider Directory
-    description: Provider and organization directory lookups
-  - name: Notifications
-    description: Admission, discharge, and transfer notifications
   - name: Audit
     description: Audit log access for compliance
+  - name: Consent
+    description: Patient consent management for data sharing
+  - name: Documents
+    description: Clinical document exchange and retrieval
+  - name: Notifications
+    description: Admission, discharge, and transfer notifications
+  - name: Patient Identity
+    description: Patient identity matching and cross-referencing (MPI)
+  - name: Provider Directory
+    description: Provider and organization directory lookups
 paths:
   /patients/match:
     post:
@@ -106,8 +106,8 @@ paths:
         across participating organizations. Returns available document
         references without retrieving the full documents.
       tags:
-        - Patient Identity
         - Documents
+        - Patient Identity
       parameters:
         - name: patientId
           in: path

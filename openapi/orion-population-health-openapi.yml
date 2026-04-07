@@ -26,20 +26,20 @@ security:
   - oauth2: []
   - bearerAuth: []
 tags:
-  - name: Registries
-    description: Patient registry management
-  - name: Risk Stratification
-    description: Patient risk scoring and stratification
-  - name: Cohorts
-    description: Patient cohort definition and analysis
-  - name: Care Programs
-    description: Care program management and enrollment
-  - name: Quality Measures
-    description: Healthcare quality measure tracking
   - name: Alerts
     description: Clinical and population health alerts
   - name: Analytics
     description: Population health analytics and reporting
+  - name: Care Programs
+    description: Care program management and enrollment
+  - name: Cohorts
+    description: Patient cohort definition and analysis
+  - name: Quality Measures
+    description: Healthcare quality measure tracking
+  - name: Registries
+    description: Patient registry management
+  - name: Risk Stratification
+    description: Patient risk scoring and stratification
 paths:
   /registries:
     get:
@@ -409,8 +409,8 @@ paths:
         Retrieve analytics and aggregate statistics for a patient cohort
         including demographics, utilization, and outcome metrics.
       tags:
-        - Cohorts
         - Analytics
+        - Cohorts
       parameters:
         - name: cohortId
           in: path
