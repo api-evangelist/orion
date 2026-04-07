@@ -44,7 +44,7 @@ paths:
   /registries:
     get:
       operationId: listRegistries
-      summary: List patient registries
+      summary: Orion Health List patient registries
       description: >-
         Retrieve a list of patient registries configured for the organization,
         such as diabetes, heart failure, or chronic disease registries.
@@ -93,7 +93,7 @@ paths:
   /registries/{registryId}:
     get:
       operationId: getRegistry
-      summary: Get a patient registry
+      summary: Orion Health Get a patient registry
       description: Retrieve details of a specific patient registry.
       tags:
         - Registries
@@ -118,7 +118,7 @@ paths:
   /registries/{registryId}/patients:
     get:
       operationId: listRegistryPatients
-      summary: List patients in a registry
+      summary: Orion Health List patients in a registry
       description: >-
         Retrieve the list of patients enrolled in a specific registry,
         with optional filtering by risk level and care status.
@@ -174,7 +174,7 @@ paths:
   /risk-stratification/scores:
     get:
       operationId: listRiskScores
-      summary: List patient risk scores
+      summary: Orion Health List patient risk scores
       description: >-
         Retrieve risk stratification scores for patients, calculated using
         configurable risk models based on clinical data, claims, and
@@ -235,7 +235,7 @@ paths:
   /risk-stratification/scores/{patientId}:
     get:
       operationId: getPatientRiskScore
-      summary: Get risk score for a patient
+      summary: Orion Health Get risk score for a patient
       description: >-
         Retrieve the current risk stratification score and risk factors
         for a specific patient.
@@ -266,7 +266,7 @@ paths:
   /cohorts:
     get:
       operationId: listCohorts
-      summary: List patient cohorts
+      summary: Orion Health List patient cohorts
       description: >-
         Retrieve defined patient cohorts used for population analytics
         and targeted interventions.
@@ -301,7 +301,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
     post:
       operationId: createCohort
-      summary: Create a patient cohort
+      summary: Orion Health Create a patient cohort
       description: >-
         Define a new patient cohort based on clinical criteria, demographics,
         diagnoses, or other population characteristics.
@@ -327,7 +327,7 @@ paths:
   /cohorts/{cohortId}:
     get:
       operationId: getCohort
-      summary: Get cohort details
+      summary: Orion Health Get cohort details
       description: Retrieve details of a specific patient cohort including membership criteria.
       tags:
         - Cohorts
@@ -351,7 +351,7 @@ paths:
           $ref: '#/components/responses/NotFound'
     put:
       operationId: updateCohort
-      summary: Update a cohort
+      summary: Orion Health Update a cohort
       description: Update the definition or criteria of an existing patient cohort.
       tags:
         - Cohorts
@@ -383,7 +383,7 @@ paths:
           $ref: '#/components/responses/NotFound'
     delete:
       operationId: deleteCohort
-      summary: Delete a cohort
+      summary: Orion Health Delete a cohort
       description: Delete a patient cohort definition.
       tags:
         - Cohorts
@@ -404,7 +404,7 @@ paths:
   /cohorts/{cohortId}/analytics:
     get:
       operationId: getCohortAnalytics
-      summary: Get cohort analytics
+      summary: Orion Health Get cohort analytics
       description: >-
         Retrieve analytics and aggregate statistics for a patient cohort
         including demographics, utilization, and outcome metrics.
@@ -447,7 +447,7 @@ paths:
   /care-programs:
     get:
       operationId: listCarePrograms
-      summary: List care programs
+      summary: Orion Health List care programs
       description: >-
         Retrieve care programs configured for the organization, such as
         chronic disease management, wellness, and transition-of-care programs.
@@ -495,7 +495,7 @@ paths:
   /care-programs/{programId}:
     get:
       operationId: getCareProgram
-      summary: Get care program details
+      summary: Orion Health Get care program details
       description: Retrieve details of a specific care program.
       tags:
         - Care Programs
@@ -520,7 +520,7 @@ paths:
   /care-programs/{programId}/enrollments:
     get:
       operationId: listProgramEnrollments
-      summary: List program enrollments
+      summary: Orion Health List program enrollments
       description: Retrieve patient enrollments in a care program.
       tags:
         - Care Programs
@@ -562,7 +562,7 @@ paths:
           $ref: '#/components/responses/NotFound'
     post:
       operationId: enrollPatient
-      summary: Enroll a patient in a care program
+      summary: Orion Health Enroll a patient in a care program
       description: Enroll a patient in a specific care program.
       tags:
         - Care Programs
@@ -601,7 +601,7 @@ paths:
   /quality-measures:
     get:
       operationId: listQualityMeasures
-      summary: List quality measures
+      summary: Orion Health List quality measures
       description: >-
         Retrieve healthcare quality measures being tracked, including
         HEDIS, CMS, and custom measures.
@@ -646,7 +646,7 @@ paths:
   /quality-measures/{measureId}/results:
     get:
       operationId: getQualityMeasureResults
-      summary: Get quality measure results
+      summary: Orion Health Get quality measure results
       description: >-
         Retrieve performance results for a specific quality measure,
         including numerator, denominator, and compliance rates.
@@ -683,7 +683,7 @@ paths:
   /alerts:
     get:
       operationId: listAlerts
-      summary: List population health alerts
+      summary: Orion Health List population health alerts
       description: >-
         Retrieve clinical and population health alerts such as care gap
         notifications, risk changes, and quality measure compliance alerts.
@@ -743,7 +743,7 @@ paths:
   /alerts/{alertId}:
     put:
       operationId: updateAlert
-      summary: Update an alert
+      summary: Orion Health Update an alert
       description: Update the status of a population health alert.
       tags:
         - Alerts
@@ -784,7 +784,7 @@ paths:
   /analytics/population-summary:
     get:
       operationId: getPopulationSummary
-      summary: Get population summary analytics
+      summary: Orion Health Get population summary analytics
       description: >-
         Retrieve aggregate population health summary including demographics,
         top conditions, utilization patterns, and risk distribution.
@@ -819,7 +819,7 @@ paths:
   /analytics/utilization:
     get:
       operationId: getUtilizationAnalytics
-      summary: Get utilization analytics
+      summary: Orion Health Get utilization analytics
       description: >-
         Retrieve healthcare utilization analytics including ED visits,
         hospital admissions, readmissions, and ambulatory utilization.

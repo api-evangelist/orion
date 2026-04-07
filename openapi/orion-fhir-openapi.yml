@@ -54,7 +54,7 @@ paths:
   /metadata:
     get:
       operationId: getCapabilityStatement
-      summary: Get server capability statement
+      summary: Orion Health Get server capability statement
       description: >-
         Returns the server's CapabilityStatement resource describing the
         FHIR operations, resources, and search parameters supported.
@@ -71,7 +71,7 @@ paths:
   /Patient:
     get:
       operationId: searchPatients
-      summary: Search for patients
+      summary: Orion Health Search for patients
       description: >-
         Search for Patient resources using standard FHIR search parameters
         including name, identifier, birthdate, gender, and address.
@@ -145,7 +145,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
     post:
       operationId: createPatient
-      summary: Create a new patient
+      summary: Orion Health Create a new patient
       description: Create a new Patient resource on the server.
       tags:
         - Patient
@@ -180,7 +180,7 @@ paths:
   /Patient/{id}:
     get:
       operationId: getPatient
-      summary: Read a patient by ID
+      summary: Orion Health Read a patient by ID
       description: Retrieve a specific Patient resource by its logical ID.
       tags:
         - Patient
@@ -200,7 +200,7 @@ paths:
           $ref: '#/components/responses/NotFound'
     put:
       operationId: updatePatient
-      summary: Update a patient
+      summary: Orion Health Update a patient
       description: Update an existing Patient resource by its logical ID.
       tags:
         - Patient
@@ -232,7 +232,7 @@ paths:
   /Patient/{id}/_history:
     get:
       operationId: getPatientHistory
-      summary: Get patient version history
+      summary: Orion Health Get patient version history
       description: Retrieve the version history of a specific Patient resource.
       tags:
         - Patient
@@ -253,7 +253,7 @@ paths:
   /Encounter:
     get:
       operationId: searchEncounters
-      summary: Search for encounters
+      summary: Orion Health Search for encounters
       description: >-
         Search for Encounter resources representing patient visits, admissions,
         and other clinical interactions.
@@ -310,7 +310,7 @@ paths:
   /Encounter/{id}:
     get:
       operationId: getEncounter
-      summary: Read an encounter by ID
+      summary: Orion Health Read an encounter by ID
       description: Retrieve a specific Encounter resource by its logical ID.
       tags:
         - Encounter
@@ -331,7 +331,7 @@ paths:
   /Observation:
     get:
       operationId: searchObservations
-      summary: Search for observations
+      summary: Orion Health Search for observations
       description: >-
         Search for Observation resources including vital signs, laboratory results,
         imaging findings, and other clinical measurements.
@@ -388,7 +388,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
     post:
       operationId: createObservation
-      summary: Create a new observation
+      summary: Orion Health Create a new observation
       description: Create a new Observation resource.
       tags:
         - Observation
@@ -414,7 +414,7 @@ paths:
   /Observation/{id}:
     get:
       operationId: getObservation
-      summary: Read an observation by ID
+      summary: Orion Health Read an observation by ID
       description: Retrieve a specific Observation resource by its logical ID.
       tags:
         - Observation
@@ -435,7 +435,7 @@ paths:
   /Condition:
     get:
       operationId: searchConditions
-      summary: Search for conditions
+      summary: Orion Health Search for conditions
       description: >-
         Search for Condition resources representing diagnoses, problems, and
         health concerns.
@@ -491,7 +491,7 @@ paths:
   /Condition/{id}:
     get:
       operationId: getCondition
-      summary: Read a condition by ID
+      summary: Orion Health Read a condition by ID
       description: Retrieve a specific Condition resource by its logical ID.
       tags:
         - Condition
@@ -512,7 +512,7 @@ paths:
   /MedicationRequest:
     get:
       operationId: searchMedicationRequests
-      summary: Search for medication requests
+      summary: Orion Health Search for medication requests
       description: >-
         Search for MedicationRequest resources representing prescriptions and
         medication orders.
@@ -565,7 +565,7 @@ paths:
   /MedicationRequest/{id}:
     get:
       operationId: getMedicationRequest
-      summary: Read a medication request by ID
+      summary: Orion Health Read a medication request by ID
       description: Retrieve a specific MedicationRequest resource by its logical ID.
       tags:
         - MedicationRequest
@@ -586,7 +586,7 @@ paths:
   /AllergyIntolerance:
     get:
       operationId: searchAllergyIntolerances
-      summary: Search for allergy intolerances
+      summary: Orion Health Search for allergy intolerances
       description: >-
         Search for AllergyIntolerance resources representing patient allergies
         and adverse reactions.
@@ -641,7 +641,7 @@ paths:
   /AllergyIntolerance/{id}:
     get:
       operationId: getAllergyIntolerance
-      summary: Read an allergy intolerance by ID
+      summary: Orion Health Read an allergy intolerance by ID
       description: Retrieve a specific AllergyIntolerance resource by its logical ID.
       tags:
         - AllergyIntolerance
@@ -662,7 +662,7 @@ paths:
   /Procedure:
     get:
       operationId: searchProcedures
-      summary: Search for procedures
+      summary: Orion Health Search for procedures
       description: >-
         Search for Procedure resources representing clinical procedures
         performed on patients.
@@ -715,7 +715,7 @@ paths:
   /Procedure/{id}:
     get:
       operationId: getProcedure
-      summary: Read a procedure by ID
+      summary: Orion Health Read a procedure by ID
       description: Retrieve a specific Procedure resource by its logical ID.
       tags:
         - Procedure
@@ -736,7 +736,7 @@ paths:
   /DiagnosticReport:
     get:
       operationId: searchDiagnosticReports
-      summary: Search for diagnostic reports
+      summary: Orion Health Search for diagnostic reports
       description: >-
         Search for DiagnosticReport resources including lab reports,
         pathology, radiology, and other diagnostic findings.
@@ -796,7 +796,7 @@ paths:
   /DiagnosticReport/{id}:
     get:
       operationId: getDiagnosticReport
-      summary: Read a diagnostic report by ID
+      summary: Orion Health Read a diagnostic report by ID
       description: Retrieve a specific DiagnosticReport resource by its logical ID.
       tags:
         - DiagnosticReport
@@ -817,7 +817,7 @@ paths:
   /CarePlan:
     get:
       operationId: searchCarePlans
-      summary: Search for care plans
+      summary: Orion Health Search for care plans
       description: >-
         Search for CarePlan resources describing planned healthcare activities
         and goals for patients.
@@ -869,7 +869,7 @@ paths:
   /CarePlan/{id}:
     get:
       operationId: getCarePlan
-      summary: Read a care plan by ID
+      summary: Orion Health Read a care plan by ID
       description: Retrieve a specific CarePlan resource by its logical ID.
       tags:
         - CarePlan
@@ -890,7 +890,7 @@ paths:
   /Immunization:
     get:
       operationId: searchImmunizations
-      summary: Search for immunizations
+      summary: Orion Health Search for immunizations
       description: >-
         Search for Immunization resources representing vaccine administrations.
       tags:
@@ -937,7 +937,7 @@ paths:
   /Immunization/{id}:
     get:
       operationId: getImmunization
-      summary: Read an immunization by ID
+      summary: Orion Health Read an immunization by ID
       description: Retrieve a specific Immunization resource by its logical ID.
       tags:
         - Immunization
@@ -958,7 +958,7 @@ paths:
   /DocumentReference:
     get:
       operationId: searchDocumentReferences
-      summary: Search for document references
+      summary: Orion Health Search for document references
       description: >-
         Search for DocumentReference resources representing clinical documents,
         notes, and reports.
@@ -1011,7 +1011,7 @@ paths:
   /DocumentReference/{id}:
     get:
       operationId: getDocumentReference
-      summary: Read a document reference by ID
+      summary: Orion Health Read a document reference by ID
       description: Retrieve a specific DocumentReference resource by its logical ID.
       tags:
         - DocumentReference
