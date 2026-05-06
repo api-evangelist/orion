@@ -1,5 +1,6 @@
 specification: FinOps Framework
 specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
 alignedWith:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
@@ -8,163 +9,114 @@ alignedWith:
   dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
 provider: Orion Health
 providerId: orion
-publisherName: Orion Health
-serviceCategory: API
+publisherName: Orion Health Limited
+serviceCategory: Healthcare Interoperability
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: false
 tags:
-  - EHR
-  - FHIR
-  - Health IT
   - Healthcare
+  - FHIR
   - HIE
-  - HL7
-  - Integration
   - Interoperability
-  - Population Health
   - FinOps
-  - Cost Management
   - FOCUS
-description: FinOps framework definition for the Orion Health API surface. Provides a FOCUS-aligned mapping
-  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
-principles:
-  - name: Visibility
-    description: Make API consumption costs visible to engineering, product, and finance teams in near
-      real-time.
-  - name: Allocation
-    description: Tag every chargeable API call with the consuming team, environment, application, and
-      feature so cost can be allocated.
-  - name: Optimization
-    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce
-      cost per useful unit of work.
-  - name: Accountability
-    description: Establish budget owners and chargeback or showback flows for each consuming team.
-domains:
-  - name: Understand Usage and Cost
-    capabilities:
-      - Data Ingestion
-      - Allocation
-      - Reporting and Analytics
-      - Anomaly Management
-  - name: Quantify Business Value
-    capabilities:
-      - Planning and Estimating
-      - Forecasting
-      - Budgeting
-      - Benchmarking
-      - Unit Economics
-  - name: Optimize Usage and Cost
-    capabilities:
-      - Architecting for Cloud
-      - Rate Optimization
-      - Workload Optimization
-      - Cloud Sustainability
-      - Licensing and SaaS
-  - name: Manage the FinOps Practice
-    capabilities:
-      - FinOps Practice Operations
-      - FinOps Education and Enablement
-      - Invoicing and Chargeback
-      - Onboarding Workloads
-      - Intersecting Disciplines
+description: >-
+  FOCUS-aligned FinOps view for Orion Health: negotiated enterprise license
+  scoped by population size and product bundle (Amadeus DCR, Virtuoso DFD,
+  Orchestral HIP, Communicate, Rhapsody), plus the underlying infrastructure
+  cost when self-hosted (on-premises hardware or customer cloud compute,
+  storage, and egress). API access is bundled with the license.
+sources:
+  - https://www.orionhealth.com/
+  - https://www.orionhealth.com/global/products/
+notes: >-
+  No public per-API meter exists. FinOps observation focuses on the
+  contractual population / product-bundle terms plus the underlying
+  self-hosted infrastructure cost where applicable.
 billingModel:
-  pricingCategory: Usage-Based
-  billingFrequency: Monthly
-  billingCurrency: USD
+  pricingCategory: Enterprise Subscription (Population-Scoped)
+  billingFrequency: Annual
+  billingCurrency: USD/NZD/AUD/GBP/EUR
   chargeCategories:
-    - Usage
     - Purchase
+    - Usage
     - Tax
-    - Credit
     - Adjustment
-  chargeFrequency: Recurring
+    - Credit
 focusColumns:
   ServiceName: Orion Health
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Healthcare Interoperability
   ProviderName: Orion Health
-  PublisherName: Orion Health
-  InvoiceIssuerName: Orion Health
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  PublisherName: Orion Health Limited
+  InvoiceIssuerName: Orion Health Limited
   BillingCurrency: USD
-  ChargeCategory: Usage
+  PricingCategory: Subscription
+  ChargeCategory: Purchase
 meters:
-  - name: api_requests
-    description: Count of billable API requests
-    unit: request
-    aggregation: sum
+  - name: orion_population_subscription
+    description: Contracted population coverage (lives) under the Orion Health agreement
+    unit: lives
+    aggregation: max
     dimensions:
-      - api
-      - endpoint
-      - tier
+      - product
       - region
-      - consumer
-  - name: data_egress
-    description: Bytes returned over the network in API responses
-    unit: GB
+  - name: orion_product_bundle
+    description: Active Orion Health products under the agreement
+    unit: bundle
+    aggregation: max
+    dimensions:
+      - product
+  - name: hosting_compute
+    description: Underlying infrastructure compute cost when Orion Health is self-hosted
+    unit: hour
     aggregation: sum
     dimensions:
-      - api
+      - environment
       - region
-      - consumer
-  - name: compute_seconds
-    description: Server-side compute consumed by the request, where applicable
-    unit: second
+  - name: hosting_storage
+    description: Underlying infrastructure storage cost when Orion Health is self-hosted
+    unit: GB-month
     aggregation: sum
     dimensions:
-      - api
-      - endpoint
-      - tier
+      - environment
+      - region
+principles:
+  - name: Visibility
+    description: >-
+      Track contracted population size, product bundle, and deployment
+      model in a contract-management ledger; for self-hosted deployments
+      track the underlying infrastructure cost in the hosting cloud's
+      cost-management tooling.
+  - name: Allocation
+    description: >-
+      Allocate Orion Health subscription cost across the participating
+      health systems, payers, or government health authorities by
+      contributing population.
+  - name: Optimization
+    description: >-
+      Right-size the deployment (Rhapsody engine count, FHIR repository
+      sizing) to actual message and population volume; consolidate
+      participating organizations onto a shared HIE deployment where
+      governance permits to reduce per-organization overhead.
+  - name: Accountability
+    description: >-
+      Pair the Orion Health platform owner with a healthcare-finance
+      partner; review contracted population coverage and deployment
+      capacity at each renewal and at participating-organization onboarding.
 apis:
   - name: Orion Health FHIR API
-    baseURL: https://api.orionhealth.com/fhir
-    tags:
-      - EHR
-      - FHIR
-      - Healthcare
-      - Interoperability
-      - Patient Data
     serviceName: Orion Health FHIR API
-    serviceCategory: API
+    serviceCategory: Healthcare Interoperability
   - name: Orion Health Population Health API
-    baseURL: https://api.orionhealth.com/population-health
-    tags:
-      - Analytics
-      - Care Coordination
-      - Healthcare
-      - Population Health
-      - Risk Stratification
     serviceName: Orion Health Population Health API
-    serviceCategory: API
+    serviceCategory: Healthcare Interoperability
   - name: Orion Health HIE API
-    baseURL: https://api.orionhealth.com/hie
-    tags:
-      - Data Sharing
-      - Health Information Exchange
-      - HIE
-      - Interoperability
-      - Patient Records
     serviceName: Orion Health HIE API
-    serviceCategory: API
+    serviceCategory: Healthcare Interoperability
   - name: Orion Health Rhapsody Integration API
-    baseURL: https://api.orionhealth.com/rhapsody
-    tags:
-      - FHIR
-      - Healthcare
-      - HL7
-      - Integration
-      - Interoperability
-      - Messaging
     serviceName: Orion Health Rhapsody Integration API
-    serviceCategory: API
-unitEconomics:
-  - name: Cost per 1K Requests
-    metric: billed_cost / (api_requests / 1000)
-    target: TBD
-  - name: Cost per Active Consumer
-    metric: billed_cost / active_consumers
-    target: TBD
+    serviceCategory: Healthcare Interoperability
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
-    url: https://apievangelist.com

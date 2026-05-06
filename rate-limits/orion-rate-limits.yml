@@ -4,106 +4,78 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Orion Health
 providerId: orion
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: false
 tags:
-  - EHR
   - FHIR
-  - Health IT
   - Healthcare
   - HIE
-  - HL7
-  - Integration
   - Interoperability
-  - Population Health
   - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the Orion Health API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
-headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+description: >-
+  Orion Health does not publish public per-second or per-minute rate-limit
+  numbers for its FHIR, Population Health, HIE, or Rhapsody Integration APIs.
+  Deployments are typically customer-managed (on-premises or customer cloud)
+  or Orion-hosted with rate limits agreed in the underlying customer
+  contract. Throughput on the Rhapsody integration engine is capacity-planned
+  per deployment.
+sources:
+  - https://www.orionhealth.com/
+  - https://www.orionhealth.com/global/products/
+notes: >-
+  No public rate-limit documentation is available. Rate limits are negotiated
+  per customer agreement; set reconciled to true after capturing
+  deployment-specific numbers from a contract or operations runbook.
 responseCodes:
-  throttled: 429
-  quotaExceeded: 429
+  unauthorized: 401
+  forbidden: 403
+  notFound: 404
+  serverError: 500
   serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Orion Health FHIR API
-      - Orion Health Population Health API
-      - Orion Health HIE API
-      - Orion Health Rhapsody Integration API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Orion Health FHIR API
-      - Orion Health Population Health API
-      - Orion Health HIE API
-      - Orion Health Rhapsody Integration API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Orion Health FHIR API
-      - Orion Health Population Health API
-      - Orion Health HIE API
-      - Orion Health Rhapsody Integration API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Orion Health FHIR API
-      - Orion Health Population Health API
-      - Orion Health HIE API
-      - Orion Health Rhapsody Integration API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Orion Health FHIR API
-      - Orion Health Population Health API
-      - Orion Health HIE API
-      - Orion Health Rhapsody Integration API
+  - name: FHIR API Throughput
+    scope: deployment
+    metric: varies
+    limit: bound by deployment sizing
+    notes: >-
+      Throughput is governed by the deployed Orion Health environment
+      (Orion-hosted or customer-managed) rather than a public per-tenancy
+      rate.
+  - name: Population Health API Throughput
+    scope: deployment
+    metric: varies
+    limit: bound by deployment sizing
+  - name: HIE API Throughput
+    scope: deployment
+    metric: varies
+    limit: bound by deployment sizing
+  - name: Rhapsody Integration Throughput
+    scope: deployment
+    metric: messages_per_second
+    limit: bound by Rhapsody engine sizing
+    notes: >-
+      Rhapsody throughput is capacity-planned per engine deployment and
+      depends on the configured routes, filters, and downstream
+      destinations.
 policies:
+  - name: Capacity-Bound Throttling
+    description: >-
+      Throughput limits are determined by the deployment sizing
+      (Orion-hosted or customer-managed) rather than a public per-tenancy
+      rate-limit table.
   - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+    description: >-
+      Clients should implement exponential backoff with jitter on 5xx
+      responses; honor any Retry-After header when present.
+  - name: HL7 / FHIR Bulk Patterns
+    description: >-
+      For large-population data exchange use FHIR Bulk Data ($export) or
+      Rhapsody batch routes rather than transactional FHIR REST calls.
+  - name: Customer Agreement
+    description: >-
+      Specific rate-limit numbers, SLAs, and capacity commitments are
+      defined in the underlying customer agreement and operations
+      runbook for each deployment.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
-    url: https://apievangelist.com
