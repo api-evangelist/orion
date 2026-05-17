@@ -81,7 +81,7 @@ apis:
         url: https://www.orionhealth.com/developers/hie-api
       - type: OpenAPI
         url: openapi/orion-hie-openapi.yml
-      - type: Terms of Service
+      - type: TermsOfService
         url: https://www.orionhealth.com/terms-of-service
       - type: JSONLD
         url: json-ld/orion-healthcare-context.jsonld
@@ -110,7 +110,7 @@ apis:
         url: openapi/orion-rhapsody-openapi.yml
       - type: AsyncAPI
         url: asyncapi/orion-rhapsody-messaging-asyncapi.yml
-      - type: Getting Started
+      - type: GettingStarted
         url: https://www.orionhealth.com/developers/getting-started
       - type: JSONLD
         url: json-ld/orion-healthcare-context.jsonld
@@ -136,25 +136,25 @@ include: []
 common:
   - type: Portal
     url: https://developer.orionhealth.io/
-  - type: Getting Started
+  - type: GettingStarted
     url: https://www.orionhealth.com/developers/getting-started
   - type: Authentication
     url: https://www.orionhealth.com/developers/authentication
   - type: Support
     url: https://www.orionhealth.com/support
-  - type: Terms of Service
+  - type: TermsOfService
     url: https://www.orionhealth.com/terms-of-service
-  - type: Privacy Policy
+  - type: PrivacyPolicy
     url: https://www.orionhealth.com/privacy-policy
   - type: Contact
     url: https://www.orionhealth.com/contact
   - type: Blog
     url: https://www.orionhealth.com/blog
-  - type: Status
+  - type: StatusPage
     url: https://status.orionhealth.com
   - type: Website
     url: https://www.orionhealth.com
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/orionhealth
   - type: Community
     url: https://community.orionhealth.com
