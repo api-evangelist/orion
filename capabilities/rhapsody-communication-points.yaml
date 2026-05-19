@@ -1,0 +1,214 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Orion Health Rhapsody Integration API — Communication Points
+  description: 'Orion Health Rhapsody Integration API — Communication Points. 4 operations. Lead operation: Orion Health List
+    communication points. Self-contained Naftiko capability covering one Orion business surface.'
+  tags:
+  - Orion
+  - Communication Points
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ORION_API_KEY: ORION_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: rhapsody-communication-points
+    baseUri: https://api.orionhealth.com/rhapsody
+    description: Orion Health Rhapsody Integration API — Communication Points business capability. Self-contained, no shared
+      references.
+    resources:
+    - name: communication-points
+      path: /communication-points
+      operations:
+      - name: listcommunicationpoints
+        method: GET
+        description: Orion Health List communication points
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: type
+          in: query
+          type: string
+          description: Communication point type
+        - name: protocol
+          in: query
+          type: string
+          description: Communication protocol
+        - name: status
+          in: query
+          type: string
+    - name: communication-points-commPointId
+      path: /communication-points/{commPointId}
+      operations:
+      - name: getcommunicationpoint
+        method: GET
+        description: Orion Health Get communication point details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: commPointId
+          in: path
+          type: integer
+          required: true
+    - name: communication-points-commPointId-start
+      path: /communication-points/{commPointId}/start
+      operations:
+      - name: startcommunicationpoint
+        method: POST
+        description: Orion Health Start a communication point
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: commPointId
+          in: path
+          type: integer
+          required: true
+    - name: communication-points-commPointId-stop
+      path: /communication-points/{commPointId}/stop
+      operations:
+      - name: stopcommunicationpoint
+        method: POST
+        description: Orion Health Stop a communication point
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: commPointId
+          in: path
+          type: integer
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.ORION_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: rhapsody-communication-points-rest
+    port: 8080
+    description: REST adapter for Orion Health Rhapsody Integration API — Communication Points. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/communication-points
+      name: communication-points
+      description: REST surface for communication-points.
+      operations:
+      - method: GET
+        name: listcommunicationpoints
+        description: Orion Health List communication points
+        call: rhapsody-communication-points.listcommunicationpoints
+        with:
+          type: rest.type
+          protocol: rest.protocol
+          status: rest.status
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/communication-points/{commpointid}
+      name: communication-points-commpointid
+      description: REST surface for communication-points-commPointId.
+      operations:
+      - method: GET
+        name: getcommunicationpoint
+        description: Orion Health Get communication point details
+        call: rhapsody-communication-points.getcommunicationpoint
+        with:
+          commPointId: rest.commPointId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/communication-points/{commpointid}/start
+      name: communication-points-commpointid-start
+      description: REST surface for communication-points-commPointId-start.
+      operations:
+      - method: POST
+        name: startcommunicationpoint
+        description: Orion Health Start a communication point
+        call: rhapsody-communication-points.startcommunicationpoint
+        with:
+          commPointId: rest.commPointId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/communication-points/{commpointid}/stop
+      name: communication-points-commpointid-stop
+      description: REST surface for communication-points-commPointId-stop.
+      operations:
+      - method: POST
+        name: stopcommunicationpoint
+        description: Orion Health Stop a communication point
+        call: rhapsody-communication-points.stopcommunicationpoint
+        with:
+          commPointId: rest.commPointId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: rhapsody-communication-points-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Orion Health Rhapsody Integration API — Communication Points. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: orion-health-list-communication-points
+      description: Orion Health List communication points
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rhapsody-communication-points.listcommunicationpoints
+      with:
+        type: tools.type
+        protocol: tools.protocol
+        status: tools.status
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-get-communication-point
+      description: Orion Health Get communication point details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rhapsody-communication-points.getcommunicationpoint
+      with:
+        commPointId: tools.commPointId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-start-communication-point
+      description: Orion Health Start a communication point
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: rhapsody-communication-points.startcommunicationpoint
+      with:
+        commPointId: tools.commPointId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-stop-communication-point
+      description: Orion Health Stop a communication point
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: rhapsody-communication-points.stopcommunicationpoint
+      with:
+        commPointId: tools.commPointId
+      outputParameters:
+      - type: object
+        mapping: $.

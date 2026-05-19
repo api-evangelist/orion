@@ -1,0 +1,261 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Orion Health FHIR API — Patient
+  description: 'Orion Health FHIR API — Patient. 5 operations. Lead operation: Orion Health Search for patients. Self-contained
+    Naftiko capability covering one Orion business surface.'
+  tags:
+  - Orion
+  - Patient
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ORION_API_KEY: ORION_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: fhir-patient
+    baseUri: https://api.orionhealth.com/fhir
+    description: Orion Health FHIR API — Patient business capability. Self-contained, no shared references.
+    resources:
+    - name: Patient
+      path: /Patient
+      operations:
+      - name: searchpatients
+        method: GET
+        description: Orion Health Search for patients
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: _id
+          in: query
+          type: string
+          description: Logical ID of the patient resource
+        - name: identifier
+          in: query
+          type: string
+          description: Patient identifier (e.g., MRN, SSN) in format system|value
+        - name: family
+          in: query
+          type: string
+          description: Family (last) name of the patient
+        - name: given
+          in: query
+          type: string
+          description: Given (first) name of the patient
+        - name: name
+          in: query
+          type: string
+          description: Any part of the patient name
+        - name: birthdate
+          in: query
+          type: string
+          description: Patient date of birth (YYYY-MM-DD)
+        - name: gender
+          in: query
+          type: string
+          description: Patient gender
+        - name: address
+          in: query
+          type: string
+          description: Any part of the patient address
+        - name: telecom
+          in: query
+          type: string
+          description: Patient phone number or email
+      - name: createpatient
+        method: POST
+        description: Orion Health Create a new patient
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: Patient-id
+      path: /Patient/{id}
+      operations:
+      - name: getpatient
+        method: GET
+        description: Orion Health Read a patient by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatepatient
+        method: PUT
+        description: Orion Health Update a patient
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: Patient-id-_history
+      path: /Patient/{id}/_history
+      operations:
+      - name: getpatienthistory
+        method: GET
+        description: Orion Health Get patient version history
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.ORION_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: fhir-patient-rest
+    port: 8080
+    description: REST adapter for Orion Health FHIR API — Patient. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/patient
+      name: patient
+      description: REST surface for Patient.
+      operations:
+      - method: GET
+        name: searchpatients
+        description: Orion Health Search for patients
+        call: fhir-patient.searchpatients
+        with:
+          _id: rest._id
+          identifier: rest.identifier
+          family: rest.family
+          given: rest.given
+          name: rest.name
+          birthdate: rest.birthdate
+          gender: rest.gender
+          address: rest.address
+          telecom: rest.telecom
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createpatient
+        description: Orion Health Create a new patient
+        call: fhir-patient.createpatient
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/patient/{id}
+      name: patient-id
+      description: REST surface for Patient-id.
+      operations:
+      - method: GET
+        name: getpatient
+        description: Orion Health Read a patient by ID
+        call: fhir-patient.getpatient
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatepatient
+        description: Orion Health Update a patient
+        call: fhir-patient.updatepatient
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/patient/{id}/history
+      name: patient-id-history
+      description: REST surface for Patient-id-_history.
+      operations:
+      - method: GET
+        name: getpatienthistory
+        description: Orion Health Get patient version history
+        call: fhir-patient.getpatienthistory
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: fhir-patient-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Orion Health FHIR API — Patient. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: orion-health-search-patients
+      description: Orion Health Search for patients
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fhir-patient.searchpatients
+      with:
+        _id: tools._id
+        identifier: tools.identifier
+        family: tools.family
+        given: tools.given
+        name: tools.name
+        birthdate: tools.birthdate
+        gender: tools.gender
+        address: tools.address
+        telecom: tools.telecom
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-create-new-patient
+      description: Orion Health Create a new patient
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: fhir-patient.createpatient
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-read-patient-id
+      description: Orion Health Read a patient by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fhir-patient.getpatient
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-update-patient
+      description: Orion Health Update a patient
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: fhir-patient.updatepatient
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-get-patient-version
+      description: Orion Health Get patient version history
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fhir-patient.getpatienthistory
+      outputParameters:
+      - type: object
+        mapping: $.

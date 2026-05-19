@@ -1,0 +1,312 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Orion Health Rhapsody Integration API — Routes
+  description: 'Orion Health Rhapsody Integration API — Routes. 6 operations. Lead operation: Orion Health List integration
+    routes. Self-contained Naftiko capability covering one Orion business surface.'
+  tags:
+  - Orion
+  - Routes
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ORION_API_KEY: ORION_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: rhapsody-routes
+    baseUri: https://api.orionhealth.com/rhapsody
+    description: Orion Health Rhapsody Integration API — Routes business capability. Self-contained, no shared references.
+    resources:
+    - name: routes
+      path: /routes
+      operations:
+      - name: listroutes
+        method: GET
+        description: Orion Health List integration routes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: status
+          in: query
+          type: string
+          description: Filter by route status
+        - name: folder
+          in: query
+          type: string
+          description: Filter by route folder path
+        - name: search
+          in: query
+          type: string
+          description: Search routes by name
+    - name: routes-routeId
+      path: /routes/{routeId}
+      operations:
+      - name: getroute
+        method: GET
+        description: Orion Health Get route details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: routeId
+          in: path
+          type: integer
+          required: true
+    - name: routes-routeId-restart
+      path: /routes/{routeId}/restart
+      operations:
+      - name: restartroute
+        method: POST
+        description: Orion Health Restart a route
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: routeId
+          in: path
+          type: integer
+          required: true
+    - name: routes-routeId-start
+      path: /routes/{routeId}/start
+      operations:
+      - name: startroute
+        method: POST
+        description: Orion Health Start a route
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: routeId
+          in: path
+          type: integer
+          required: true
+    - name: routes-routeId-statistics
+      path: /routes/{routeId}/statistics
+      operations:
+      - name: getroutestatistics
+        method: GET
+        description: Orion Health Get route processing statistics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: routeId
+          in: path
+          type: integer
+          required: true
+        - name: periodStart
+          in: query
+          type: string
+        - name: periodEnd
+          in: query
+          type: string
+        - name: interval
+          in: query
+          type: string
+          description: Statistics aggregation interval
+    - name: routes-routeId-stop
+      path: /routes/{routeId}/stop
+      operations:
+      - name: stoproute
+        method: POST
+        description: Orion Health Stop a route
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: routeId
+          in: path
+          type: integer
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.ORION_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: rhapsody-routes-rest
+    port: 8080
+    description: REST adapter for Orion Health Rhapsody Integration API — Routes. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/routes
+      name: routes
+      description: REST surface for routes.
+      operations:
+      - method: GET
+        name: listroutes
+        description: Orion Health List integration routes
+        call: rhapsody-routes.listroutes
+        with:
+          status: rest.status
+          folder: rest.folder
+          search: rest.search
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/routes/{routeid}
+      name: routes-routeid
+      description: REST surface for routes-routeId.
+      operations:
+      - method: GET
+        name: getroute
+        description: Orion Health Get route details
+        call: rhapsody-routes.getroute
+        with:
+          routeId: rest.routeId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/routes/{routeid}/restart
+      name: routes-routeid-restart
+      description: REST surface for routes-routeId-restart.
+      operations:
+      - method: POST
+        name: restartroute
+        description: Orion Health Restart a route
+        call: rhapsody-routes.restartroute
+        with:
+          routeId: rest.routeId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/routes/{routeid}/start
+      name: routes-routeid-start
+      description: REST surface for routes-routeId-start.
+      operations:
+      - method: POST
+        name: startroute
+        description: Orion Health Start a route
+        call: rhapsody-routes.startroute
+        with:
+          routeId: rest.routeId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/routes/{routeid}/statistics
+      name: routes-routeid-statistics
+      description: REST surface for routes-routeId-statistics.
+      operations:
+      - method: GET
+        name: getroutestatistics
+        description: Orion Health Get route processing statistics
+        call: rhapsody-routes.getroutestatistics
+        with:
+          routeId: rest.routeId
+          periodStart: rest.periodStart
+          periodEnd: rest.periodEnd
+          interval: rest.interval
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/routes/{routeid}/stop
+      name: routes-routeid-stop
+      description: REST surface for routes-routeId-stop.
+      operations:
+      - method: POST
+        name: stoproute
+        description: Orion Health Stop a route
+        call: rhapsody-routes.stoproute
+        with:
+          routeId: rest.routeId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: rhapsody-routes-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Orion Health Rhapsody Integration API — Routes. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: orion-health-list-integration-routes
+      description: Orion Health List integration routes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rhapsody-routes.listroutes
+      with:
+        status: tools.status
+        folder: tools.folder
+        search: tools.search
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-get-route-details
+      description: Orion Health Get route details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rhapsody-routes.getroute
+      with:
+        routeId: tools.routeId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-restart-route
+      description: Orion Health Restart a route
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: rhapsody-routes.restartroute
+      with:
+        routeId: tools.routeId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-start-route
+      description: Orion Health Start a route
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: rhapsody-routes.startroute
+      with:
+        routeId: tools.routeId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-get-route-processing
+      description: Orion Health Get route processing statistics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rhapsody-routes.getroutestatistics
+      with:
+        routeId: tools.routeId
+        periodStart: tools.periodStart
+        periodEnd: tools.periodEnd
+        interval: tools.interval
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-stop-route
+      description: Orion Health Stop a route
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: rhapsody-routes.stoproute
+      with:
+        routeId: tools.routeId
+      outputParameters:
+      - type: object
+        mapping: $.

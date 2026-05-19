@@ -1,0 +1,135 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Orion Health FHIR API — Condition
+  description: 'Orion Health FHIR API — Condition. 2 operations. Lead operation: Orion Health Search for conditions. Self-contained
+    Naftiko capability covering one Orion business surface.'
+  tags:
+  - Orion
+  - Condition
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ORION_API_KEY: ORION_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: fhir-condition
+    baseUri: https://api.orionhealth.com/fhir
+    description: Orion Health FHIR API — Condition business capability. Self-contained, no shared references.
+    resources:
+    - name: Condition
+      path: /Condition
+      operations:
+      - name: searchconditions
+        method: GET
+        description: Orion Health Search for conditions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: patient
+          in: query
+          type: string
+          description: Reference to the patient
+        - name: code
+          in: query
+          type: string
+          description: ICD-10 or SNOMED code for the condition
+        - name: clinical-status
+          in: query
+          type: string
+          description: Clinical status of the condition
+        - name: category
+          in: query
+          type: string
+          description: Condition category
+        - name: onset-date
+          in: query
+          type: string
+          description: Date of onset
+    - name: Condition-id
+      path: /Condition/{id}
+      operations:
+      - name: getcondition
+        method: GET
+        description: Orion Health Read a condition by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.ORION_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: fhir-condition-rest
+    port: 8080
+    description: REST adapter for Orion Health FHIR API — Condition. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/condition
+      name: condition
+      description: REST surface for Condition.
+      operations:
+      - method: GET
+        name: searchconditions
+        description: Orion Health Search for conditions
+        call: fhir-condition.searchconditions
+        with:
+          patient: rest.patient
+          code: rest.code
+          clinical-status: rest.clinical-status
+          category: rest.category
+          onset-date: rest.onset-date
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/condition/{id}
+      name: condition-id
+      description: REST surface for Condition-id.
+      operations:
+      - method: GET
+        name: getcondition
+        description: Orion Health Read a condition by ID
+        call: fhir-condition.getcondition
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: fhir-condition-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Orion Health FHIR API — Condition. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: orion-health-search-conditions
+      description: Orion Health Search for conditions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fhir-condition.searchconditions
+      with:
+        patient: tools.patient
+        code: tools.code
+        clinical-status: tools.clinical-status
+        category: tools.category
+        onset-date: tools.onset-date
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-read-condition-id
+      description: Orion Health Read a condition by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fhir-condition.getcondition
+      outputParameters:
+      - type: object
+        mapping: $.

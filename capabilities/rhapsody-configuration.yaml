@@ -1,0 +1,110 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Orion Health Rhapsody Integration API — Configuration
+  description: 'Orion Health Rhapsody Integration API — Configuration. 2 operations. Lead operation: Orion Health List installed
+    components. Self-contained Naftiko capability covering one Orion business surface.'
+  tags:
+  - Orion
+  - Configuration
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ORION_API_KEY: ORION_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: rhapsody-configuration
+    baseUri: https://api.orionhealth.com/rhapsody
+    description: Orion Health Rhapsody Integration API — Configuration business capability. Self-contained, no shared references.
+    resources:
+    - name: configuration-components
+      path: /configuration/components
+      operations:
+      - name: listcomponents
+        method: GET
+        description: Orion Health List installed components
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: type
+          in: query
+          type: string
+    - name: configuration-engine
+      path: /configuration/engine
+      operations:
+      - name: getengineconfiguration
+        method: GET
+        description: Orion Health Get engine configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.ORION_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: rhapsody-configuration-rest
+    port: 8080
+    description: REST adapter for Orion Health Rhapsody Integration API — Configuration. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/configuration/components
+      name: configuration-components
+      description: REST surface for configuration-components.
+      operations:
+      - method: GET
+        name: listcomponents
+        description: Orion Health List installed components
+        call: rhapsody-configuration.listcomponents
+        with:
+          type: rest.type
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/configuration/engine
+      name: configuration-engine
+      description: REST surface for configuration-engine.
+      operations:
+      - method: GET
+        name: getengineconfiguration
+        description: Orion Health Get engine configuration
+        call: rhapsody-configuration.getengineconfiguration
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: rhapsody-configuration-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Orion Health Rhapsody Integration API — Configuration. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: orion-health-list-installed-components
+      description: Orion Health List installed components
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rhapsody-configuration.listcomponents
+      with:
+        type: tools.type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-get-engine-configuration
+      description: Orion Health Get engine configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rhapsody-configuration.getengineconfiguration
+      outputParameters:
+      - type: object
+        mapping: $.

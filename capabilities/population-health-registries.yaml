@@ -1,0 +1,179 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Orion Health Population Health API — Registries
+  description: 'Orion Health Population Health API — Registries. 3 operations. Lead operation: Orion Health List patient registries.
+    Self-contained Naftiko capability covering one Orion business surface.'
+  tags:
+  - Orion
+  - Registries
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ORION_API_KEY: ORION_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: population-health-registries
+    baseUri: https://api.orionhealth.com/population-health
+    description: Orion Health Population Health API — Registries business capability. Self-contained, no shared references.
+    resources:
+    - name: registries
+      path: /registries
+      operations:
+      - name: listregistries
+        method: GET
+        description: Orion Health List patient registries
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: type
+          in: query
+          type: string
+          description: Filter by registry type
+        - name: status
+          in: query
+          type: string
+          description: Filter by registry status
+    - name: registries-registryId
+      path: /registries/{registryId}
+      operations:
+      - name: getregistry
+        method: GET
+        description: Orion Health Get a patient registry
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: registryId
+          in: path
+          type: string
+          required: true
+    - name: registries-registryId-patients
+      path: /registries/{registryId}/patients
+      operations:
+      - name: listregistrypatients
+        method: GET
+        description: Orion Health List patients in a registry
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: registryId
+          in: path
+          type: string
+          required: true
+        - name: riskLevel
+          in: query
+          type: string
+          description: Filter by risk stratification level
+        - name: careStatus
+          in: query
+          type: string
+          description: Filter by care management status
+    authentication:
+      type: bearer
+      token: '{{env.ORION_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: population-health-registries-rest
+    port: 8080
+    description: REST adapter for Orion Health Population Health API — Registries. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/registries
+      name: registries
+      description: REST surface for registries.
+      operations:
+      - method: GET
+        name: listregistries
+        description: Orion Health List patient registries
+        call: population-health-registries.listregistries
+        with:
+          type: rest.type
+          status: rest.status
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/registries/{registryid}
+      name: registries-registryid
+      description: REST surface for registries-registryId.
+      operations:
+      - method: GET
+        name: getregistry
+        description: Orion Health Get a patient registry
+        call: population-health-registries.getregistry
+        with:
+          registryId: rest.registryId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/registries/{registryid}/patients
+      name: registries-registryid-patients
+      description: REST surface for registries-registryId-patients.
+      operations:
+      - method: GET
+        name: listregistrypatients
+        description: Orion Health List patients in a registry
+        call: population-health-registries.listregistrypatients
+        with:
+          registryId: rest.registryId
+          riskLevel: rest.riskLevel
+          careStatus: rest.careStatus
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: population-health-registries-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Orion Health Population Health API — Registries. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: orion-health-list-patient-registries
+      description: Orion Health List patient registries
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: population-health-registries.listregistries
+      with:
+        type: tools.type
+        status: tools.status
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-get-patient-registry
+      description: Orion Health Get a patient registry
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: population-health-registries.getregistry
+      with:
+        registryId: tools.registryId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-list-patients-registry
+      description: Orion Health List patients in a registry
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: population-health-registries.listregistrypatients
+      with:
+        registryId: tools.registryId
+        riskLevel: tools.riskLevel
+        careStatus: tools.careStatus
+      outputParameters:
+      - type: object
+        mapping: $.

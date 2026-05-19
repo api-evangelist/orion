@@ -1,0 +1,129 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Orion Health FHIR API — Immunization
+  description: 'Orion Health FHIR API — Immunization. 2 operations. Lead operation: Orion Health Search for immunizations.
+    Self-contained Naftiko capability covering one Orion business surface.'
+  tags:
+  - Orion
+  - Immunization
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ORION_API_KEY: ORION_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: fhir-immunization
+    baseUri: https://api.orionhealth.com/fhir
+    description: Orion Health FHIR API — Immunization business capability. Self-contained, no shared references.
+    resources:
+    - name: Immunization
+      path: /Immunization
+      operations:
+      - name: searchimmunizations
+        method: GET
+        description: Orion Health Search for immunizations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: patient
+          in: query
+          type: string
+          description: Reference to the patient
+        - name: date
+          in: query
+          type: string
+          description: Vaccination date or date range
+        - name: vaccine-code
+          in: query
+          type: string
+          description: CVX code for the vaccine
+        - name: status
+          in: query
+          type: string
+          description: Immunization status
+    - name: Immunization-id
+      path: /Immunization/{id}
+      operations:
+      - name: getimmunization
+        method: GET
+        description: Orion Health Read an immunization by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.ORION_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: fhir-immunization-rest
+    port: 8080
+    description: REST adapter for Orion Health FHIR API — Immunization. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/immunization
+      name: immunization
+      description: REST surface for Immunization.
+      operations:
+      - method: GET
+        name: searchimmunizations
+        description: Orion Health Search for immunizations
+        call: fhir-immunization.searchimmunizations
+        with:
+          patient: rest.patient
+          date: rest.date
+          vaccine-code: rest.vaccine-code
+          status: rest.status
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/immunization/{id}
+      name: immunization-id
+      description: REST surface for Immunization-id.
+      operations:
+      - method: GET
+        name: getimmunization
+        description: Orion Health Read an immunization by ID
+        call: fhir-immunization.getimmunization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: fhir-immunization-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Orion Health FHIR API — Immunization. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: orion-health-search-immunizations
+      description: Orion Health Search for immunizations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fhir-immunization.searchimmunizations
+      with:
+        patient: tools.patient
+        date: tools.date
+        vaccine-code: tools.vaccine-code
+        status: tools.status
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-read-immunization-id
+      description: Orion Health Read an immunization by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fhir-immunization.getimmunization
+      outputParameters:
+      - type: object
+        mapping: $.

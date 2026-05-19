@@ -1,0 +1,190 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Orion Health HIE API — Patient Identity
+  description: 'Orion Health HIE API — Patient Identity. 3 operations. Lead operation: Orion Health Match a patient across
+    organizations. Self-contained Naftiko capability covering one Orion business surface.'
+  tags:
+  - Orion
+  - Patient Identity
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ORION_API_KEY: ORION_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: hie-patient-identity
+    baseUri: https://api.orionhealth.com/hie
+    description: Orion Health HIE API — Patient Identity business capability. Self-contained, no shared references.
+    resources:
+    - name: patients-match
+      path: /patients/match
+      operations:
+      - name: matchpatient
+        method: POST
+        description: Orion Health Match a patient across organizations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: patients-patientId-identifiers
+      path: /patients/{patientId}/identifiers
+      operations:
+      - name: getpatientidentifiers
+        method: GET
+        description: Orion Health Get patient cross-reference identifiers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: patientId
+          in: path
+          type: string
+          required: true
+        - name: organization
+          in: query
+          type: string
+          description: Filter by organization
+    - name: patients-patientId-record-locator
+      path: /patients/{patientId}/record-locator
+      operations:
+      - name: locatepatientrecords
+        method: GET
+        description: Orion Health Locate patient records across organizations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: patientId
+          in: path
+          type: string
+          required: true
+        - name: organization
+          in: query
+          type: string
+          description: Filter by source organization
+        - name: documentType
+          in: query
+          type: string
+          description: Filter by document type
+        - name: dateFrom
+          in: query
+          type: string
+        - name: dateTo
+          in: query
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.ORION_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: hie-patient-identity-rest
+    port: 8080
+    description: REST adapter for Orion Health HIE API — Patient Identity. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/patients/match
+      name: patients-match
+      description: REST surface for patients-match.
+      operations:
+      - method: POST
+        name: matchpatient
+        description: Orion Health Match a patient across organizations
+        call: hie-patient-identity.matchpatient
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/patients/{patientid}/identifiers
+      name: patients-patientid-identifiers
+      description: REST surface for patients-patientId-identifiers.
+      operations:
+      - method: GET
+        name: getpatientidentifiers
+        description: Orion Health Get patient cross-reference identifiers
+        call: hie-patient-identity.getpatientidentifiers
+        with:
+          patientId: rest.patientId
+          organization: rest.organization
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/patients/{patientid}/record-locator
+      name: patients-patientid-record-locator
+      description: REST surface for patients-patientId-record-locator.
+      operations:
+      - method: GET
+        name: locatepatientrecords
+        description: Orion Health Locate patient records across organizations
+        call: hie-patient-identity.locatepatientrecords
+        with:
+          patientId: rest.patientId
+          organization: rest.organization
+          documentType: rest.documentType
+          dateFrom: rest.dateFrom
+          dateTo: rest.dateTo
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: hie-patient-identity-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Orion Health HIE API — Patient Identity. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: orion-health-match-patient-across
+      description: Orion Health Match a patient across organizations
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: hie-patient-identity.matchpatient
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-get-patient-cross
+      description: Orion Health Get patient cross-reference identifiers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: hie-patient-identity.getpatientidentifiers
+      with:
+        patientId: tools.patientId
+        organization: tools.organization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-locate-patient-records
+      description: Orion Health Locate patient records across organizations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: hie-patient-identity.locatepatientrecords
+      with:
+        patientId: tools.patientId
+        organization: tools.organization
+        documentType: tools.documentType
+        dateFrom: tools.dateFrom
+        dateTo: tools.dateTo
+      outputParameters:
+      - type: object
+        mapping: $.

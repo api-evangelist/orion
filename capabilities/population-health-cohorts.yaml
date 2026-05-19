@@ -1,0 +1,286 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Orion Health Population Health API — Cohorts
+  description: 'Orion Health Population Health API — Cohorts. 6 operations. Lead operation: Orion Health List patient cohorts.
+    Self-contained Naftiko capability covering one Orion business surface.'
+  tags:
+  - Orion
+  - Cohorts
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ORION_API_KEY: ORION_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: population-health-cohorts
+    baseUri: https://api.orionhealth.com/population-health
+    description: Orion Health Population Health API — Cohorts business capability. Self-contained, no shared references.
+    resources:
+    - name: cohorts
+      path: /cohorts
+      operations:
+      - name: listcohorts
+        method: GET
+        description: Orion Health List patient cohorts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: status
+          in: query
+          type: string
+      - name: createcohort
+        method: POST
+        description: Orion Health Create a patient cohort
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: cohorts-cohortId
+      path: /cohorts/{cohortId}
+      operations:
+      - name: getcohort
+        method: GET
+        description: Orion Health Get cohort details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: cohortId
+          in: path
+          type: string
+          required: true
+      - name: updatecohort
+        method: PUT
+        description: Orion Health Update a cohort
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: cohortId
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletecohort
+        method: DELETE
+        description: Orion Health Delete a cohort
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: cohortId
+          in: path
+          type: string
+          required: true
+    - name: cohorts-cohortId-analytics
+      path: /cohorts/{cohortId}/analytics
+      operations:
+      - name: getcohortanalytics
+        method: GET
+        description: Orion Health Get cohort analytics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: cohortId
+          in: path
+          type: string
+          required: true
+        - name: metrics
+          in: query
+          type: string
+          description: Comma-separated list of metrics to include
+        - name: periodStart
+          in: query
+          type: string
+        - name: periodEnd
+          in: query
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.ORION_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: population-health-cohorts-rest
+    port: 8080
+    description: REST adapter for Orion Health Population Health API — Cohorts. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/cohorts
+      name: cohorts
+      description: REST surface for cohorts.
+      operations:
+      - method: GET
+        name: listcohorts
+        description: Orion Health List patient cohorts
+        call: population-health-cohorts.listcohorts
+        with:
+          status: rest.status
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createcohort
+        description: Orion Health Create a patient cohort
+        call: population-health-cohorts.createcohort
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cohorts/{cohortid}
+      name: cohorts-cohortid
+      description: REST surface for cohorts-cohortId.
+      operations:
+      - method: GET
+        name: getcohort
+        description: Orion Health Get cohort details
+        call: population-health-cohorts.getcohort
+        with:
+          cohortId: rest.cohortId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatecohort
+        description: Orion Health Update a cohort
+        call: population-health-cohorts.updatecohort
+        with:
+          cohortId: rest.cohortId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletecohort
+        description: Orion Health Delete a cohort
+        call: population-health-cohorts.deletecohort
+        with:
+          cohortId: rest.cohortId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cohorts/{cohortid}/analytics
+      name: cohorts-cohortid-analytics
+      description: REST surface for cohorts-cohortId-analytics.
+      operations:
+      - method: GET
+        name: getcohortanalytics
+        description: Orion Health Get cohort analytics
+        call: population-health-cohorts.getcohortanalytics
+        with:
+          cohortId: rest.cohortId
+          metrics: rest.metrics
+          periodStart: rest.periodStart
+          periodEnd: rest.periodEnd
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: population-health-cohorts-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Orion Health Population Health API — Cohorts. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: orion-health-list-patient-cohorts
+      description: Orion Health List patient cohorts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: population-health-cohorts.listcohorts
+      with:
+        status: tools.status
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-create-patient-cohort
+      description: Orion Health Create a patient cohort
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: population-health-cohorts.createcohort
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-get-cohort-details
+      description: Orion Health Get cohort details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: population-health-cohorts.getcohort
+      with:
+        cohortId: tools.cohortId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-update-cohort
+      description: Orion Health Update a cohort
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: population-health-cohorts.updatecohort
+      with:
+        cohortId: tools.cohortId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-delete-cohort
+      description: Orion Health Delete a cohort
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: population-health-cohorts.deletecohort
+      with:
+        cohortId: tools.cohortId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: orion-health-get-cohort-analytics
+      description: Orion Health Get cohort analytics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: population-health-cohorts.getcohortanalytics
+      with:
+        cohortId: tools.cohortId
+        metrics: tools.metrics
+        periodStart: tools.periodStart
+        periodEnd: tools.periodEnd
+      outputParameters:
+      - type: object
+        mapping: $.
