@@ -2,12 +2,20 @@
   "repo": "orion",
   "feeds": [
     {
-      "source": "https://www.orionhealth.com/blog",
+      "source": "https://www.orionhealth.com/feed/",
       "feed_url": "https://www.orionhealth.com/feed/",
-      "title": "Orion Health",
-      "saved": 18
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://www.orionhealth.com/contact",
+      "feed_url": "https://orionhealth.com/global/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
     }
   ],
-  "post_count": 30,
-  "fetched": "2026-05-17T20:20:35Z"
+  "post_count": 32,
+  "fetched": "2026-06-01T23:35:02Z"
 }
