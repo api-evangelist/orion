@@ -129,6 +129,8 @@ tags:
   - Population Health
 include: []
 common:
+  - type: OAuthScopes
+    url: scopes/orion-scopes.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/orion-health
   - type: Portal
