@@ -129,6 +129,10 @@ tags:
   - Population Health
 include: []
 common:
+  - type: DomainSecurity
+    url: security/orion-domain-security.yml
+  - type: Authentication
+    url: authentication/orion-authentication.yml
   - type: OAuthScopes
     url: scopes/orion-scopes.yml
   - type: LinkedIn
