@@ -129,6 +129,8 @@ tags:
   - Population Health
 include: []
 common:
+  - type: AgenticAccess
+    url: agentic-access/orion-agentic-access.yml
   - type: DomainSecurity
     url: security/orion-domain-security.yml
   - type: Authentication
